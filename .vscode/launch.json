@@ -1,0 +1,15 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug Application",
+      "type": "cppdbg",
+      "request": "launch",
+      "program": "${workspaceFolder}/Bin/Linux/Debug/Application",
+      "cwd": "${workspaceFolder}",
+      "stopAtEntry": false,
+      "MIMode": "gdb",
+      "preLaunchTask": "CMake Build Debug",
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "CMake Smart Configure",
+      "type": "shell",
+      "command": "if [ ! -f Build/Linux/CMakeCache.txt ] || [ CMakeLists.txt -nt Build/Linux/CMakeCache.txt ]; then cmake -B Build/Linux -G \"Ninja Multi-Config\" -DCMAKE_C_COMPILER=gcc -DCMAKE_CXX_COMPILER=g++; fi",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    },
+
+    {
+      "label": "CMake Build Debug",
+      "type": "shell",
+      "command": "cmake --build Build/Linux --config Debug",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "dependsOn": "CMake Smart Configure",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+
+    {
+      "label": "CMake Build Release",
+      "type": "shell",
+      "command": "cmake --build Build/Linux --config Release",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": ["$gcc"],
+      "dependsOn": "CMake Smart Configure"
+    },
+
+    {
+      "label": "CMake Clean",
+      "type": "shell",
+      "command": "cmake --build Build/Linux --target clean",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      }
+    }
+  ]
+}
