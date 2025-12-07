@@ -45,26 +45,31 @@ constexpr const char* GetTextStyle(ETextStyle textStyle)
 }
 
 void PrintLineToConsole(const std::string& text,
-	ETextColor textColor, ETextStyle textStyle, EMessageType messageType)
+	ETextColor textColor, ETextStyle textStyle, EMessageType messageType, bool newLine = true, bool timestamp = true)
 {
-	const auto timestamp = Time::GetNow().GetString(ETimeStringFormat::Default);
-	const auto timestampedText = Format("[{0}] {1}", timestamp, text);
+	const auto timestampedText = Format("[{0}] {1}", Time::GetNow().GetString(ETimeStringFormat::Default), text);
 
-	auto print = [&timestampedText, &textColor, &textStyle](std::ostream& outStream)
+	auto print = [textColor, textStyle, newLine](std::ostream& outStream, const std::string& text)
 		{
 			outStream << GetTextStyle(textStyle) << GetTextColor(textColor);
-			outStream << timestampedText << '\n';
+			outStream << text;
+
+			if(newLine)
+			{
+				outStream << '\n';
+			}
+
 			outStream << GetTextStyle(m_DefaultTextStyle) << GetTextColor(m_DefaultTextColor);
 		};
 
 	switch (messageType)
 	{
 	case EMessageType::Text:
-		print(std::cout);
+		print(std::cout, timestamp ? timestampedText : text);
 		break;
 
 	case EMessageType::Error:
-		print(std::cerr);
+		print(std::cerr, timestamp ? timestampedText : text);
 		LogErrorToFile(timestampedText);
 		break;
 
@@ -93,19 +98,20 @@ void Init()
 	}
 }
 
-void Text(const std::string& text)
+//TODO Refactor maybe
+void Text(const std::string& text, bool newLine, bool timestamp)
 {
-	Text(text, m_DefaultTextColor, m_DefaultTextStyle);
+	Text(text, m_DefaultTextColor, m_DefaultTextStyle, newLine, timestamp);
 }
 
-void Text(const std::string& text, ETextColor textColor)
+void Text(const std::string& text, ETextColor textColor, bool newLine, bool timestamp)
 {
-	Text(text, textColor, m_DefaultTextStyle);
+	Text(text, textColor, m_DefaultTextStyle, newLine, timestamp);
 }
-void Text(const std::string& text, ETextColor textColor, ETextStyle textStyle)
+void Text(const std::string& text, ETextColor textColor, ETextStyle textStyle, bool newLine, bool timestamp)
 {
 	ReturnIf(m_LogLevel < ELogLevel::LogText);
-	PrintLineToConsole(text, textColor, textStyle, EMessageType::Text);
+	PrintLineToConsole(text, textColor, textStyle, EMessageType::Text, newLine, timestamp);
 }
 
 void Error(const std::string& text)
@@ -142,7 +148,7 @@ ELogLevel GetLogLevel()
 	return m_LogLevel;
 }
 
-void TestLogging()
+void _TestLogging()
 {
 	const auto previousLogLevel = GetLogLevel();
 

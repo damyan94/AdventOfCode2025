@@ -2,11 +2,10 @@
 
 #include "Application/Application.h"
 
-////////////////////////////////////////////////////////////////////////////////
-int32_t main([[maybe_unused]] int32_t argC, [[maybe_unused]] char* argV[])
+int32_t main(int32_t argC, char** argV)
 {
 	Application app;
-	ReturnIf(!app.Init(), EXIT_FAILURE);
+	ReturnIf(!app.Init({argC, argV}), EXIT_FAILURE);
 
 	app.Run();
 

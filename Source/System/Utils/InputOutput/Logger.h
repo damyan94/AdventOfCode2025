@@ -54,9 +54,9 @@ namespace Log
 {
 	void Init();
 
-	void Text(const std::string& text);
-	void Text(const std::string& text, ETextColor textColor);
-	void Text(const std::string& text, ETextColor textColor, ETextStyle textStyle);
+	void Text(const std::string& text, bool newLine = true, bool timestamp = false);
+	void Text(const std::string& text, ETextColor textColor, bool newLine = true, bool timestamp = false);
+	void Text(const std::string& text, ETextColor textColor, ETextStyle textStyle, bool newLine = true, bool timestamp = false);
 
 	void Error(const std::string& text);
 	void Warning(const std::string& text);
@@ -66,5 +66,5 @@ namespace Log
 	void SetLogLevel(ELogLevel logLevel);
 	ELogLevel GetLogLevel();
 
-	void TestLogging();
+	void _TestLogging();
 } // !namespace Log
